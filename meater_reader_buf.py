@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 from socket import *
 import select
-import paho.mqtt.client as mqtt
+# import paho.mqtt.client as mqtt
 import math
 from string import Template
 import time
@@ -10,6 +10,11 @@ from configparser import ConfigParser
 import sys,os
 
 import protobuf.meater_block_pb2
+
+class Log:
+    def publish(self, topic, message, qos, retain):
+        print("MQTT:", topic, message)
+
 
 sys.path.append(os.getcwd())
 
@@ -208,13 +213,14 @@ def processPacket(packet):
 
 
 # mqtt setup and connect
-mqttc = mqtt.Client()
-mqttc.on_publish = on_publish
-mqttc.on_disconnect = on_disconnect
-mqttc.on_connect = on_connect
-if (MQTT_USEAUTH):
-    mqttc.username_pw_set(username=MQTT_USERNAME,password=MQTT_PASSWORD)
-mqttc.connect(MQTT_HOSTNAME, MQTT_PORT, 300)
+# mqttc = mqtt.Client()
+# mqttc.on_publish = on_publish
+# mqttc.on_disconnect = on_disconnect
+# mqttc.on_connect = on_connect
+# if (MQTT_USEAUTH):
+#     mqttc.username_pw_set(username=MQTT_USERNAME,password=MQTT_PASSWORD)
+# mqttc.connect(MQTT_HOSTNAME, MQTT_PORT, 300)
+mqttc = Log()
 
 # udp socket to listen to
 s_client = socket(AF_INET, SOCK_DGRAM)
@@ -238,7 +244,7 @@ topicTimeRem =  Template("meater/probe/$id/estTimeRem")
 topicBlockStatus = "meater/block/status"
 topicBlockPower = "meater/block/power"
 
-mqttc.loop_start()
+# mqttc.loop_start()
 
 inputs = [s_client]
 outputs = []

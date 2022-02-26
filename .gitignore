@@ -1,1 +1,4 @@
+protobuf/__pycache__
 protobuf/__pycache__/meater_block_pb2.cpython-39.pyc
+.venv
+config.ini
